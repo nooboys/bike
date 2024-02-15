@@ -5,12 +5,12 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: .
   DOTNET_VERSION: '6'
 'on':
-  push:
-    branches:
-      - test
-  pull_request:
-    branches:
-      - test
+  #push:
+  #  branches:
+  #    - test
+  #pull_request:
+  #  branches:
+  #    - test
   workflow_dispatch: null
 jobs:
   build:
