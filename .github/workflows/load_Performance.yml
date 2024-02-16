@@ -1,4 +1,4 @@
-name: Main Workflow
+name: Load_perf
 on:
   push:
     branches:
