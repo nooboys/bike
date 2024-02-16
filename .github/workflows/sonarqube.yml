@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Build
+    name: sonarscan
     runs-on: windows-latest
     permissions: read-all
     steps:
