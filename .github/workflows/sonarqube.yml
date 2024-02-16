@@ -3,7 +3,7 @@ name: SonarBuild
 on:
   push:
     branches:
-      - test
+      - main
 
 
 jobs:
