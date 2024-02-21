@@ -13,9 +13,9 @@ name: "CodeQL"
 
 on:
   #push:
-  #  branches: [ "main" ]
+  #  branches: [ "codeQL" ]
   #pull_request:
-  #  branches: [ "main" ]
+  #  branches: [ "codeQL" ]
   workflow_dispatch: null  
 
 jobs:
