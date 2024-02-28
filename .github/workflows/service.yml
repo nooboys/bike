@@ -15,7 +15,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      # required for all workflows
+      contents: read
+      packages: read
+      # To report GitHub Actions status checks
+      statuses: write
+      issues: read
+      checks: write
+      pull-requests: write
       security-events: write
     steps:
       - uses: actions/checkout@v3
