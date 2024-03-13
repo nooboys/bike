@@ -1,0 +1,32 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: DAST scan
+
+on:
+  #push:
+  #  branches: [ "main" ]
+  #pull_request:
+  #  branches: [ "main" ]
+  workflow_dispatch: null  
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    name: burp scan
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: scan process
+      uses: PortSwigger/dastardly-github-action@v1.0.0
+      with:
+        target-url: 'https://crontab.guru/'
+    - name: JUnit Report Action
+      if: always()
+      uses: mikepenz/action-junit-report@v4.1.0
+      with:
+        check_name: 'Dastardly Scan Report'
+        report_paths: '**/*.xml'
+        require_tests: true
+        
