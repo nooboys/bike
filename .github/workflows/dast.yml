@@ -32,11 +32,11 @@ jobs:
         require_tests: true   
         
     - name: Run tests
+      continue-on-error: true
       working-directory: .
       run: |
         ls
         pwd
-        cp dastardly-report.xml /github/workspace
 
           
     - name: expand
@@ -65,7 +65,7 @@ jobs:
       continue-on-error: true
       uses: irongut/CodeCoverageSummary@v1.3.0
       with:
-        filename: ./dastardly-report.xml
+        filename: ./dast.result
         badge: true
         format: markdown
         output: both    
