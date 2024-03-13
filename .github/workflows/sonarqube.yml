@@ -1,10 +1,10 @@
 name: SonarBuild
 
 on:
-  push:
-    branches:
-      - main
-
+  #push:
+  #  branches:
+  #    - main
+  workflow_dispatch: null 
 
 jobs:
   build:
