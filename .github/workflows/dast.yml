@@ -36,6 +36,7 @@ jobs:
       run: |
         ls
         pwd
+        cp dastardly-report.xml /github/workspace
 
           
     - name: expand
@@ -81,7 +82,7 @@ jobs:
       if: github.event_name == 'pull_request'
       with:
         recreate: true
-        path: code-coverage-results.md
+        path: dastardly-report.xml
 
     - name: Add Coverage Summary
       continue-on-error: true
@@ -90,7 +91,7 @@ jobs:
         script: |
               const fs = require('fs');
               // read summary file
-              var summary = fs.readFileSync('code-coverage-results.md', 'utf8');
+              var summary = fs.readFileSync('dastardly-report.xml', 'utf8');
               await core.summary
               .addHeading('Code Coverage Summary')
               .addRaw(summary)
