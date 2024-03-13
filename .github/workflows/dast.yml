@@ -42,7 +42,7 @@ jobs:
       working-directory: .
       continue-on-error: true
       run: |
-          cat **/dastardly-report.xml > dast.result || true
+          cat dastardly-report.xml > dast.result || true
           cat dast.result
           {
             echo "## burp dast"
@@ -67,7 +67,7 @@ jobs:
       if: github.event_name == 'pull_request'
       with:
         recreate: true
-        path: code-coverage-results.md
+        path: dastardly-report.xml
 
     - name: Add Coverage Summary
       uses: actions/github-script@v7
@@ -75,7 +75,7 @@ jobs:
         script: |
               const fs = require('fs');
               // read summary file
-              var summary = fs.readFileSync('code-coverage-results.md', 'utf8');
+              var summary = fs.readFileSync('dastardly-report.xml', 'utf8');
               await core.summary
               .addHeading('Code Coverage Summary')
               .addRaw(summary)
