@@ -22,6 +22,14 @@ jobs:
       uses: PortSwigger/dastardly-github-action@v1.0.0
       with:
         target-url: 'https://crontab.guru/'
+
+    - name: SAST validator
+  # You may pin to the exact commit or the version.
+  # uses: michelleamesquita/sast-validator@2a29ad2ef568c5ce77e68f7dbf4147f12b9cc663
+      uses: michelleamesquita/sast-validator@v40
+      with:
+        path: .
+              
     - name: Publish Report 
       if: always()
       uses: mikepenz/action-junit-report@v4.1.0
