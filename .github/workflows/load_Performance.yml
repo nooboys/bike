@@ -1,8 +1,9 @@
 name: Load_perf
 on:
-  push:
-    branches:
-      - main
+  #push:
+  #  branches:
+  #    - main
+  workflow_dispatch: null 
 jobs:
   build:
     name: Run k6 test
