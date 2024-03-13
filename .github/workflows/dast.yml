@@ -27,7 +27,7 @@ jobs:
       working-directory: .
       continue-on-error: true
       run: |
-          cat **/*.xml > dast.result || true
+          cat **/dastardly-report.xml > dast.result || true
           cat dast.result
           {
             echo "## burp dast"
