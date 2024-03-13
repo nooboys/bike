@@ -22,7 +22,7 @@ jobs:
       uses: PortSwigger/dastardly-github-action@v1.0.0
       with:
         target-url: 'https://crontab.guru/'
-    - name: JUnit Report Action
+    - name: Publish Report 
       if: always()
       uses: mikepenz/action-junit-report@v4.1.0
       with:
