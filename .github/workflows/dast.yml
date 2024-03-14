@@ -68,7 +68,8 @@ jobs:
       run: ls /home/runner/work/bike/bike
 
     - name: Print File Path
-      run: echo "/home/runner/work/bike/bike/dastardly-report.xml"
+      continue-on-error: true
+      run: cat /home/runner/work/bike/bike/dastardly-report.xml
   
     - name: Code Coverage Summary Report
       continue-on-error: true
@@ -80,10 +81,12 @@ jobs:
         output: both    
 
     - name: Run tests md
+      continue-on-error: true
       working-directory: .
       run: |
         ls
         pwd
+        cat dast.result
         
     - name: Add Coverage PR Comment
       continue-on-error: true
