@@ -94,7 +94,7 @@ jobs:
       if: github.event_name == 'pull_request'
       with:
         recreate: true
-        path: dastardly-report.xml
+        path: dast.result
 
     - name: Add Coverage Summary
       continue-on-error: true
