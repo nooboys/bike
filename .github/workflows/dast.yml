@@ -16,6 +16,15 @@ jobs:
     runs-on: ubuntu-latest
     name: burp scan
 
+    permissions:
+      contents: read
+      packages: read
+      # To report GitHub Actions status checks
+      statuses: write
+      issues: read
+      checks: write
+      pull-requests: write
+
     steps:
     - uses: actions/checkout@v4
     - name: scan process
