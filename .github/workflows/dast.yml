@@ -105,7 +105,7 @@ jobs:
               // read summary file
               var summary = fs.readFileSync('dastardly-report.xml', 'utf8');
               await core.summary
-              .addHeading('Code Coverage Summary')
+              .addHeading('Code Coverage Summary test')
               .addRaw(summary)
               .write()                  
         
