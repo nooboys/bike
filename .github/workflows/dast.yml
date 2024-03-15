@@ -11,10 +11,19 @@ on:
   workflow_dispatch: null  
 
 jobs:
-  build:
+  buildPRreport:
 
     runs-on: ubuntu-latest
     name: burp scan
+
+    permissions:
+      contents: read
+      packages: read
+      # To report GitHub Actions status checks
+      statuses: write
+      issues: read
+      checks: write
+      pull-requests: write
 
     steps:
     - uses: actions/checkout@v4
@@ -23,11 +32,27 @@ jobs:
       with:
         target-url: 'https://crontab.guru/'
 
+    - name: Publish Report 
+      if: always()
+      uses: mikepenz/action-junit-report@v4.1.0
+      with:
+        check_name: 'Dastardly Scan Report'
+        report_paths: '**/*.xml'
+        require_tests: true   
+        
+    - name: Run tests
+      continue-on-error: true
+      working-directory: .
+      run: |
+        ls
+        pwd
+
+          
     - name: expand
       working-directory: .
       continue-on-error: true
       run: |
-          cat **/dastardly-report.xml > dast.result || true
+          cat dastardly-report.xml > dast.result || true
           cat dast.result
           {
             echo "## burp dast"
@@ -38,12 +63,59 @@ jobs:
             echo '```'
             echo "</details>"
           } >> $GITHUB_STEP_SUMMARY
-              
-    - name: Publish Report 
+
+    - name: List Files
+      run: ls /home/runner/work/bike/bike
+
+    - name: Print File Path
+      continue-on-error: true
+      run: cat /home/runner/work/bike/bike/dastardly-report.xml
+
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
-      uses: mikepenz/action-junit-report@v4.1.0
       with:
-        check_name: 'Dastardly Scan Report'
-        report_paths: '**/*.xml'
-        require_tests: true
+        files: |
+            dastardly-report.xml 
+  
+    - name: Code Coverage Summary Report
+      continue-on-error: true
+      uses: irongut/CodeCoverageSummary@v1.3.0
+      with:
+        filename: ./*.xml
+        badge: true
+        format: markdown
+        output: both    
+
+    - name: Run tests md
+      continue-on-error: true
+      working-directory: .
+      run: |
+        ls
+        pwd
+        cat dast.result
+        
+    - name: Add Coverage PR Comment
+      continue-on-error: true
+      uses: marocchino/sticky-pull-request-comment@v2
+      if: github.event_name == 'pull_request'
+      with:
+        recreate: true
+        path: code-coverage-results.md
+
+    - name: Add Coverage Summary
+      continue-on-error: true
+      uses: actions/github-script@v7
+      with:
+        script: |
+              const fs = require('fs');
+              // read summary file
+              var summary = fs.readFileSync('code-coverage-results.md', 'utf8');
+              await core.summary
+              .addHeading('Code Coverage Summary')
+              .addRaw(summary)
+              .write()                  
+        
+
+      
         
