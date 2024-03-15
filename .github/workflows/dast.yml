@@ -112,7 +112,7 @@ jobs:
               // read summary file
               var summary = fs.readFileSync('code-coverage-results.md', 'utf8');
               await core.summary
-              .addHeading('Code Coverage Summary')
+              .addHeading('Code Coverage Summary test')
               .addRaw(summary)
               .write()                  
         
