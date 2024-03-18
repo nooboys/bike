@@ -58,6 +58,11 @@ jobs:
       continue-on-error: true
       run: cat /home/runner/work/bike/bike/*.xml
 
+    - name: Debug Coverage Report Files
+      run: |
+       echo "Coverage Report Files:"
+       ls /home/runner/work/bike/bike/coverage-report  
+
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
