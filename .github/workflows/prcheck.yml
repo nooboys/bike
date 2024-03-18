@@ -57,6 +57,11 @@ jobs:
     - name: Print File Path
       continue-on-error: true
       run: cat /home/runner/work/bike/bike/*.xml
+      
+    - name: Print all xml File Path
+      continue-on-error: true
+      run: ls **/*.*.xml
+   
 
     - name: Debug Coverage Report Files
       run: |
