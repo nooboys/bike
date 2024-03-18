@@ -41,7 +41,12 @@ jobs:
       run: |
         dotnet test --collect:"XPlat Code Coverage"
 
+    - name: Install ReportGenerator
+      run: dotnet tool install -g dotnet-reportgenerator-globaltool
+    
+
     - name: Generate coverage report
+      continue-on-error: true
       run: |
         reportgenerator "-reports:**/*.cobertura.xml" "-targetdir:coverage-report" "-reporttypes:HTML"
           
