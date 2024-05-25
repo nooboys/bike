@@ -13,6 +13,11 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+    - name: just a simple ls command
+      run: |
+        ls -la
+        pwd
+        ls
 
     - name: Copy folder content recursively to remote
       uses: garygrossgarten/github-action-scp@release
