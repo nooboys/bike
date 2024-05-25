@@ -27,4 +27,4 @@ jobs:
         pwd
         EOF
       env:
-        SSHPASS: ${{ Bharat@123Kota }}
+        SSHPASS: ${{ secrets.DROPLET_PASSWORD }}
