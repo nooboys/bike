@@ -24,7 +24,7 @@ jobs:
           cd /var/www
           ls
           pwd
-          cd 
+          cd /usr/bin/git
           ls
           pwd
      
