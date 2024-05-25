@@ -14,6 +14,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Copy folder content recursively to remote
+      uses: garygrossgarten/github-action-scp@release
+      with:
+        local: "*.sln"
+        remote: /var/www
+        host: ${{ secrets.DROPLET_IP }}
+        username: ${{ secrets.DROPLET_USER }}
+        password: ${{ secrets.DROPLET_PASSWORD }}
+
     - name: Run sshpass commands
       uses: matheusvanzan/sshpass-action@v2
       with:
