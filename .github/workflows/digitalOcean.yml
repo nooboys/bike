@@ -17,11 +17,11 @@ jobs:
     - name: Copy files to server
       run: sshpass -p ${{ Bharat@123Kota }} scp -r ./* ${{ root }}@${{ 209.38.149.108 }}:/var/www
       env:
-        SSHPASS: ${{ Bharat@123Kota }}
+        SSHPASS: ${{ secrets.DROPLET_PASSWORD }}
 
     - name: Deploy on server
       run: |
-        sshpass -p ${{ secrets.DO_DROPLET_PASSWORD }} ssh ${{ secrets.DO_DROPLET_USER }}@${{ secrets.DO_DROPLET_IP }} << 'EOF'
+        sshpass -p ${{ secrets.DROPLET_PASSWORD }} ssh ${{ root }}@${{ 209.38.149.108 }} << 'EOF'
         cd /var/www
         ls
         pwd
