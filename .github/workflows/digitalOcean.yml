@@ -21,8 +21,10 @@ jobs:
         user: ${{ secrets.DROPLET_USER }}
         pass: ${{ secrets.DROPLET_PASSWORD }}
         run: |
-          cp -r ./*.sln /var/www
           cd /var/www
+          ls
+          pwd
+          cd 
           ls
           pwd
      
