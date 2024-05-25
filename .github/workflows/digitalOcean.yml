@@ -14,17 +14,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Copy files to server
-      run: sshpass -p ${{ secrets.DROPLET_PASSWORD }} scp -r ./* ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_IP }}:/var/www
-      env:
-        SSHPASS: ${{ secrets.DROPLET_PASSWORD }}
-
-    - name: Deploy on server
-      run: |
-        sshpass -p ${{ secrets.DROPLET_PASSWORD }} ssh ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_IP }} << 'EOF'
-        cd /var/www
-        ls
-        pwd
-        EOF
-      env:
-        SSHPASS: ${{ secrets.DROPLET_PASSWORD }}
+    - name: Run sshpass commands
+      uses: matheusvanzan/sshpass-action@v2
+      with:
+        host: ${{ secrets.DROPLET_IP }}
+        user: ${{ secrets.DROPLET_USER }}
+        pass: ${{ secrets.DROPLET_PASSWORD }}
+        run: |
+          cp -r ./*.sln /var/www
+          cd /var/www
+          ls
+          pwd
+     
