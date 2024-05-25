@@ -15,7 +15,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Copy files to server
-      run: sshpass -p ${{ Bharat@123Kota }} scp -r ./* ${{ root }}@${{ 209.38.149.108 }}:/var/www
+      run: sshpass -p ${{ secrets.DROPLET_PASSWORD }} scp -r ./* ${{ root }}@${{ 209.38.149.108 }}:/var/www
       env:
         SSHPASS: ${{ secrets.DROPLET_PASSWORD }}
 
