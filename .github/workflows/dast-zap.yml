@@ -52,7 +52,7 @@ jobs:
           rules_file_name: ".zap/rules.tsv"
           # Extra options passed to zap-baseline.py
           # -a includes alpha rules, -m sets spider minutes, -r/-J generate reports, etc. [1](https://www.zaproxy.org/docs/docker/baseline-scan/)
-          cmd_options: "-a -m 2 -r zap_report.html -J zap_report.json -w zap_report.md"
+          cmd_options: "-a -m 2 -r zap_report.html -J zap_report.json"
           allow_issue_writing: false
 
       - name: Upload ZAP reports
