@@ -1,0 +1,31 @@
+name: CIbuild
+env:
+  DOTNET_VERSION: '6'
+'on':
+  #push:
+  #  branches:
+  #    - featuret
+  workflow_dispatch: null
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release
+      - name: Test
+        run: dotnet test --no-build --verbosity normal  
+      - name: publish
+        run: 'dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp'
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-app
+          path: '${{env.DOTNET_ROOT}}/myapp/**'
