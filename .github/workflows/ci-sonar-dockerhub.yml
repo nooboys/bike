@@ -12,7 +12,7 @@ env:
   SONAR_HOST_URL: "https://sonarcloud.io"
   # 👇 Replace these two with your values from SonarCloud
   SONAR_ORGANIZATION: "vishnubike"
-  SONAR_PROJECT_KEY: "bike"
+  SONAR_PROJECT_KEY: "nooboys_bike"
 
 jobs:
   build_test_sonar_docker:
