@@ -24,6 +24,15 @@ jobs:
         with:
           fetch-depth: 0
 
+      
+      - name: Verify SonarCloud project exists (API)
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          curl -s -u "${SONAR_TOKEN}:" \
+          "https://sonarcloud.io/api/projects/search?organization=${{ env.SONAR_ORGANIZATION }}&projects=${{ env.SONAR_PROJECT_KEY }}"
+    
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
