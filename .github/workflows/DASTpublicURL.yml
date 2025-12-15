@@ -26,4 +26,4 @@ jobs:
           allow_issue_writing: false
           artifact_name: zap-full-public
           rules_file_name: ".zap/rules.tsv"
-          cmd_options: "-a -j -m 5 -r report_html.html -J report_json.json -w report_md.md"
+          cmd_options: "-a -r report_html.html"
