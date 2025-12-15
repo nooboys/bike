@@ -1,0 +1,87 @@
+
+name: CIbuild-SonarCloud-DockerHub
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: "6.0.x"
+  IMAGE_NAME: "bike"
+  SONAR_HOST_URL: "https://sonarcloud.io"
+  # 👇 Replace these two with your values from SonarCloud
+  SONAR_ORGANIZATION: "vishnubike"
+  SONAR_PROJECT_KEY: "bike"
+
+jobs:
+  build_test_sonar_docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout (full history for better analysis)
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      # Install the official SonarScanner for .NET as a .NET global tool
+      - name: Install SonarScanner for .NET
+        run: dotnet tool install --global dotnet-sonarscanner
+
+      # Begin Sonar analysis
+      # SonarCloud docs show begin /k /o and passing token via sonar.token [1](https://docs.sonarsource.com/sonarqube-cloud/advanced-setup/ci-based-analysis/sonarscanner-for-dotnet/using/)
+      - name: Sonar - Begin
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          dotnet sonarscanner begin \
+            /k:"${{ env.SONAR_PROJECT_KEY }}" \
+            /o:"${{ env.SONAR_ORGANIZATION }}" \
+            /d:sonar.host.url="${{ env.SONAR_HOST_URL }}" \
+            /d:sonar.token="${{ secrets.SONARCLOUD_TOKEN }}" \
+            /d:sonar.cs.opencover.reportsPaths="**/TestResults/**/coverage.opencover.xml" \
+            /d:sonar.cs.vstest.reportsPaths="**/TestResults/*.trx"
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build (Release)
+        run: dotnet build --configuration Release --no-restore
+
+      # Run tests + collect coverage in OpenCover format
+      # This pattern matches common SonarCloud + .NET coverage integration examples [5](https://github.com/marketplace/actions/sonarscan-dotnet)
+      - name: Test + Coverage (OpenCover)
+        run: |
+          dotnet test --configuration Release --no-build \
+            --logger "trx" \
+            --collect:"XPlat Code Coverage" \
+            -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+
+      # End Sonar analysis (uploads results)
+      - name: Sonar - End
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+
+      # ---- DockerHub push (official docker actions) ----
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:featuret
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
