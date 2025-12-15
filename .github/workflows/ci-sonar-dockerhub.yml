@@ -75,9 +75,9 @@ jobs:
       # End Sonar analysis (uploads results)
       - name: Sonar - End
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
         run: |
-          dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          dotnet sonarscanner end /d:sonar.token="${{ secrets.SONARCLOUD_TOKEN }}"
 
       # ---- DockerHub push (official docker actions) ----
       - name: Login to Docker Hub
