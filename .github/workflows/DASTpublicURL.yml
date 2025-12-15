@@ -1,54 +1,29 @@
 
-name: DAST - OWASP ZAP Full Active Scan (Public IP)
+name: DAST - OWASP ZAP Full Active (Public URL)
 
 on:
   workflow_dispatch:
     inputs:
-      target_ip:
-        description: "Public IP to scan (use only targets you are allowed to test)"
+      target_url:
+        description: "Public URL to scan (only scan targets you have permission to test)"
         required: true
-        default: "65.61.137.117"
-      target_scheme:
-        description: "http or https (https to IP often fails due to TLS/SNI; http is safer for IP scanning)"
-        required: true
-        default: "http"
+        default: "https://demo.owasp-juice.shop/"
 
 permissions:
   contents: read
 
 jobs:
   zap_full_active:
-    name: ZAP Full Scan (ACTIVE)
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Full scan performs active attacks. Use only with permission. [1](https://www.zaproxy.org/docs/docker/full-scan/)
-      - name: Run OWASP ZAP Full Active Scan
+      - name: ZAP Full Scan (ACTIVE)
         uses: zaproxy/action-full-scan@v0.13.0
         with:
-          # Scanning by IP: prefer http://IP to avoid TLS certificate/SNI mismatch on https://IP
-          # target: "${{ github.event.inputs.target_scheme }}://${{ github.event.inputs.target_ip }}/"
-          target: "https://demo.owasp-juice.shop/"
-
-          # Optional: ignore noisy rules via .zap/rules.tsv (create this file if you want)
-          # ZAP supports rules config for IGNORE/INFO/WARN/FAIL. [5](https://deepwiki.com/zaproxy/action-baseline)
-          rules_file_name: ".zap/rules.tsv"
-
+          target: ${{ github.event.inputs.target_url }}
           allow_issue_writing: false
-          artifact_name: "zap-full-active-ip"
-
-          # Reports: -r HTML, -J JSON, -w Markdown are supported flags. [1](https://www.zaproxy.org/docs/docker/full-scan/)
-          # -j enables Ajax spider; -m limits spider time; -a includes alpha rules. [1](https://www.zaproxy.org/docs/docker/full-scan/)
-          cmd_options: "-a -j -m 5 -r full_report.html -J full_report.json -w full_report.md"
-
-      - name: Upload ZAP Reports
-        uses: actions/upload-artifact@v4
-        with:
-          name: zap-full-active-ip-reports
-          path: |
-            full_report.html
-            full_report.json
-            full_report.md
+          artifact_name: zap-full-public
+          rules_file_name: ".zap/rules.tsv"
+          cmd_options: "-a -j -m 5 -r report_html.html -J report_json.json -w report_md.md"
