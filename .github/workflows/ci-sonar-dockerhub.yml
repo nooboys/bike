@@ -29,8 +29,9 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          curl -s -u "${SONAR_TOKEN}:" \
+          echo "Calling SonarCloud API..."    echo "ORG=${{ env.SONAR_ORGANIZATION }}" curl -sS -u "${SONAR_TOKEN}:" \
           "https://sonarcloud.io/api/projects/search?organization=${{ env.SONAR_ORGANIZATION }}&projects=${{ env.SONAR_PROJECT_KEY }}"
+          echo "KEY=${{ env.SONAR_PROJECT_KEY }}"
     
 
       - name: Setup .NET
